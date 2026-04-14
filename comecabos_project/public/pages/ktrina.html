@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La K-Trina — ComeCabos</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0f0d;
+    --surface: #111810;
+    --card: #161e14;
+    --border: #242e21;
+    --accent: #c8e84a;
+    --text: #edf2e8;
+    --muted: #7a8c74;
+    --tag: #1a2418;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; font-size:15px; }
+
+  nav {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 40px; border-bottom:1px solid var(--border);
+    background:rgba(10,15,13,0.94); backdrop-filter:blur(14px);
+    position:sticky; top:0; z-index:100;
+  }
+  .logo { font-family:'Playfair Display',serif; font-weight:800; font-size:20px; text-decoration:none; color:var(--text); }
+  .logo span { color:var(--accent); }
+  .back-btn { font-size:13px; color:var(--muted); text-decoration:none; display:flex; align-items:center; gap:6px; transition:color 0.2s; }
+  .back-btn:hover { color:var(--text); }
+
+  /* HERO */
+  .rest-hero {
+    height:280px;
+    background:linear-gradient(135deg,#3a1f0a,#7c4a1a,#2a1206);
+    display:flex; align-items:center; justify-content:center;
+    font-size:90px; position:relative;
+  }
+  .rest-hero::after { content:''; position:absolute; inset:0; background:linear-gradient(to bottom, transparent 40%, var(--bg) 100%); }
+
+  .rest-info { max-width:900px; margin:-40px auto 0; padding:0 40px; position:relative; z-index:2; }
+  .rest-name { font-family:'Playfair Display',serif; font-size:42px; font-weight:800; letter-spacing:-1px; margin-bottom:8px; }
+  .rest-sub { font-size:13px; color:var(--accent); font-style:italic; margin-bottom:10px; }
+  .rest-meta { display:flex; gap:16px; font-size:13px; color:var(--muted); margin-bottom:32px; flex-wrap:wrap; }
+
+  /* LAYOUT */
+  .layout { max-width:900px; margin:0 auto; padding:0 40px 120px; display:grid; grid-template-columns:1fr 340px; gap:32px; align-items:start; }
+
+  /* MENÚ */
+  .menu-section { margin-bottom:32px; }
+  .menu-cat { font-size:11px; color:var(--accent); letter-spacing:2px; text-transform:uppercase; margin-bottom:16px; padding-bottom:8px; border-bottom:1px solid var(--border); }
+  .menu-item {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 0; border-bottom:1px solid var(--border);
+    transition:background 0.15s;
+  }
+  .item-left { flex:1; }
+  .item-name { font-size:15px; margin-bottom:3px; }
+  .item-desc { font-size:12px; color:var(--muted); line-height:1.5; max-width:360px; }
+  .item-price { font-size:15px; color:var(--accent); font-weight:500; margin:0 16px; white-space:nowrap; }
+  .qty-ctrl { display:flex; align-items:center; gap:8px; }
+  .qty-btn {
+    width:28px; height:28px; border-radius:50%; border:1px solid var(--border);
+    background:var(--tag); color:var(--text); font-size:16px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; transition:all 0.15s;
+    line-height:1;
+  }
+  .qty-btn.plus { background:var(--accent); color:#0a0f0d; border-color:var(--accent); }
+  .qty-btn:hover { transform:scale(1.1); }
+  .qty-num { font-size:14px; font-weight:500; min-width:18px; text-align:center; }
+
+  /* CARRITO */
+  .cart-box {
+    background:var(--card); border:1px solid var(--border); border-radius:20px;
+    padding:24px; position:sticky; top:80px;
+  }
+  .cart-title { font-family:'Playfair Display',serif; font-size:20px; font-weight:700; margin-bottom:16px; }
+  .cart-empty { text-align:center; color:var(--muted); font-size:13px; padding:32px 0; }
+  .cart-line { display:flex; justify-content:space-between; font-size:13px; padding:8px 0; border-bottom:1px solid var(--border); }
+  .cart-line:last-of-type { border-bottom:none; }
+  .cart-totals { border-top:1px solid var(--border); margin-top:12px; padding-top:12px; }
+  .cart-row { display:flex; justify-content:space-between; font-size:14px; margin-bottom:6px; }
+  .cart-row.total { font-size:17px; font-weight:500; margin-top:10px; }
+  .cart-row .label { color:var(--muted); }
+  .cart-row.total .label { color:var(--text); }
+
+  .input-field {
+    width:100%; background:var(--tag); border:1px solid var(--border); border-radius:12px;
+    padding:11px 14px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:13px;
+    outline:none; margin-bottom:10px; transition:border-color 0.2s;
+  }
+  .input-field:focus { border-color:var(--accent); }
+  .input-field::placeholder { color:var(--muted); }
+
+  .pay-btn {
+    width:100%; background:var(--accent); color:#0a0f0d; border:none;
+    border-radius:100px; padding:15px; font-family:'DM Sans',sans-serif;
+    font-size:15px; font-weight:500; cursor:pointer; margin-top:4px;
+    transition:transform 0.2s, box-shadow 0.2s;
+  }
+  .pay-btn:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(200,232,74,0.3); }
+  .pay-btn:disabled { opacity:0.4; cursor:not-allowed; transform:none; box-shadow:none; }
+
+  /* CARRITO MÓVIL */
+  .cart-fab {
+    display:none; position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
+    background:var(--accent); color:#0a0f0d; border:none; border-radius:100px;
+    padding:13px 28px; font-family:'DM Sans',sans-serif; font-weight:500; font-size:14px;
+    cursor:pointer; z-index:200; white-space:nowrap;
+    box-shadow:0 8px 28px rgba(200,232,74,0.35);
+  }
+
+  /* MODAL MÓVIL */
+  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:300; align-items:flex-end; justify-content:center; }
+  .modal-box { background:var(--card); border:1px solid var(--border); border-radius:24px 24px 0 0; width:100%; max-width:480px; padding:28px; max-height:85vh; overflow-y:auto; }
+
+  .secure-note { text-align:center; font-size:11px; color:var(--muted); margin-top:8px; }
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+  .menu-section { animation:fadeUp 0.4s ease both; }
+
+  @media (max-width: 700px) {
+    .layout { grid-template-columns:1fr; padding:0 20px 140px; }
+    .cart-box { display:none; }
+    .cart-fab { display:block; }
+    .rest-info { padding:0 20px; }
+    nav { padding:14px 20px; }
+    .rest-name { font-size:30px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="back-btn">← Volver</a>
+  <a href="index.html" class="logo">Come<span>Cabos</span></a>
+  <div style="width:60px;"></div>
+</nav>
+
+<div class="rest-hero">🍽️</div>
+
+<div class="rest-info">
+  <div class="rest-name">La K-Trina</div>
+  <div class="rest-sub">Cocina Mexicana Tradicional</div>
+  <div class="rest-meta">
+    <span>📍 San José del Cabo</span>
+    <span>🕐 30–40 min entrega</span>
+    <span>🛵 Envío $50</span>
+    <span>⭐ Nuevo en ComeCabos</span>
+  </div>
+</div>
+
+<div class="layout">
+
+  <!-- MENÚ COMPLETO -->
+  <div>
+
+    <div class="menu-section" style="animation-delay:0.05s">
+      <div class="menu-cat">Entradas</div>
+      <div id="entradas"></div>
+    </div>
+
+    <div class="menu-section" style="animation-delay:0.1s">
+      <div class="menu-cat">Antojitos</div>
+      <div id="antojitos"></div>
+    </div>
+
+    <div class="menu-section" style="animation-delay:0.15s">
+      <div class="menu-cat">Molcajetes</div>
+      <div id="molcajetes"></div>
+    </div>
+
+    <div class="menu-section" style="animation-delay:0.2s">
+      <div class="menu-cat">Cortes</div>
+      <div id="cortes"></div>
+    </div>
+
+    <div class="menu-section" style="animation-delay:0.25s">
+      <div class="menu-cat">Mariscos</div>
+      <div id="mariscos"></div>
+    </div>
+
+  </div>
+
+  <!-- CARRITO DESKTOP -->
+  <div class="cart-box" id="cart-desktop">
+    <div class="cart-title">Tu pedido</div>
+    <div id="cart-content-desktop"><div class="cart-empty">Agrega platillos para empezar</div></div>
+  </div>
+
+</div>
+
+<!-- FAB MÓVIL -->
+<button class="cart-fab" id="cart-fab" style="display:none;" onclick="openModal()">
+  🛒 Ver pedido · $<span id="fab-total">0</span>
+</button>
+
+<!-- MODAL MÓVIL -->
+<div class="modal-overlay" id="modal" style="display:none;">
+  <div class="modal-box">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+      <div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;">Tu pedido</div>
+      <button onclick="closeModal()" style="background:var(--tag);border:none;color:var(--text);width:32px;height:32px;border-radius:50%;font-size:18px;cursor:pointer;">×</button>
+    </div>
+    <div id="cart-content-mobile"></div>
+  </div>
+</div>
+
+<script>
+  const menuData = {
+    entradas: [
+      { id:'e1', name:'Sopa de Tortilla', desc:'Chile guajillo con totopos crujientes, queso, crema y aguacate', price:185 },
+      { id:'e2', name:'Guacamole Tradicional', desc:'Preparado al momento con aguacate fresco, salsa mexicana y totopos', price:180 },
+      { id:'e3', name:'Nachos Clásicos', desc:'Totopos dorados con frijoles, queso Monterrey, guacamole y chiles', price:245 },
+      { id:'e4', name:'Nachos de Pollo', desc:'Totopos dorados con pollo, queso Monterrey y guacamole', price:275 },
+      { id:'e5', name:'Nachos de Arrachera', desc:'Totopos con arrachera, queso Monterrey, guacamole y chiles', price:320 },
+      { id:'e6', name:'Nachos de Camarón', desc:'Totopos con camarón, queso Monterrey y guacamole', price:320 },
+      { id:'e7', name:'Queso Fundido Natural', desc:'Queso Monterrey fundido servido con tortillas de harina', price:185 },
+      { id:'e8', name:'Queso Fundido con Chorizo', desc:'Queso Monterrey fundido con chorizo y tortillas', price:220 },
+      { id:'e9', name:'Queso Fundido de Pollo', desc:'Queso Monterrey fundido con pollo y tortillas', price:245 },
+      { id:'e10', name:'Queso Fundido de Arrachera', desc:'Queso Monterrey fundido con arrachera y tortillas', price:265 },
+      { id:'e11', name:'Queso Fundido de Camarón', desc:'Queso Monterrey fundido con camarón y tortillas', price:295 },
+    ],
+    antojitos: [
+      { id:'a1', name:'Taco de Arrachera', desc:'Orden de tacos con guacamole, salsa picante y salsa mexicana', price:360 },
+      { id:'a2', name:'Taco de Pollo', desc:'Orden de tacos con guacamole, salsa picante y salsa mexicana', price:300 },
+      { id:'a3', name:'Taco de Camarón', desc:'Orden de tacos con guacamole, salsa picante y salsa mexicana', price:360 },
+      { id:'a4', name:'Taco Rib Eye', desc:'Orden de tacos con guacamole, salsa picante y salsa mexicana', price:500 },
+      { id:'a5', name:'Taco de Pescado', desc:'Orden de tacos con guacamole, salsa picante y salsa mexicana', price:360 },
+      { id:'a6', name:'Quesadilla de Queso', desc:'Servidas con frijoles, arroz y pico de gallo', price:220 },
+      { id:'a7', name:'Quesadilla de Pollo', desc:'Servidas con frijoles, arroz y pico de gallo', price:285 },
+      { id:'a8', name:'Quesadilla de Arrachera', desc:'Servidas con frijoles, arroz y pico de gallo', price:320 },
+      { id:'a9', name:'Fajita de Pollo', desc:'Salteadas con chile morrón y cebolla, con frijoles y arroz', price:350 },
+      { id:'a10', name:'Fajita de Arrachera', desc:'Salteadas con chile morrón y cebolla, con frijoles y arroz', price:390 },
+      { id:'a11', name:'Enchiladas Verdes de Pollo', desc:'Con frijoles y arroz', price:265 },
+      { id:'a12', name:'Enchiladas Verdes de Arrachera', desc:'Con frijoles y arroz', price:295 },
+    ],
+    molcajetes: [
+      { id:'m1', name:'Molcajete Mar y Tierra', desc:'Servido en molcajete caliente con queso fundido, nopal, cebolla cambray y tortillas', price:450 },
+      { id:'m2', name:'Molcajete Mixto', desc:'Servido en molcajete caliente con queso fundido, nopal, cebolla cambray y tortillas', price:500 },
+      { id:'m3', name:'Molcajete de Arrachera', desc:'Servido en molcajete caliente con queso fundido, nopal, cebolla cambray y tortillas', price:480 },
+      { id:'m4', name:'Molcajete de Rib Eye', desc:'Servido en molcajete caliente con queso fundido, nopal, cebolla cambray y tortillas', price:600 },
+    ],
+    cortes: [
+      { id:'c1', name:'Arrachera', desc:'Acompañado de arroz, frijoles, pico de gallo y guacamole', price:450 },
+      { id:'c2', name:'Rib Eye', desc:'Acompañado de vegetales salteados y pan Baguette', price:500 },
+    ],
+    mariscos: [
+      { id:'ms1', name:'Ceviche de Pescado', desc:'Pescado fresco marinado en limón con pico de gallo, salsa mexicana y totopos', price:285 },
+      { id:'ms2', name:'Cóctel de Camarón', desc:'Camarón cocido en salsa coctelera con aguacate, cebolla, cilantro y totopos', price:320 },
+      { id:'ms3', name:'Aguachile', desc:'Camarón fresco marinado en limón, chile serrano y sal, con pepino, cebolla y aguacate', price:300 },
+      { id:'ms4', name:'Sashimi de Atún', desc:'Atún fresco en láminas con salsa de la casa', price:320 },
+      { id:'ms5', name:'Pesca del Día al Ajillo', desc:'Filete fresco salteado en ajo y chile guajillo, con frijoles, arroz y verduras al vapor', price:420 },
+      { id:'ms6', name:'Pulpo en Adobo a la Parrilla', desc:'Pulpo tierno a la parrilla con adobo de chile guajillo y chipotle, mayonesa especiada y salsas negras', price:520 },
+    ],
+  };
+
+  let cart = {};
+
+  function renderSection(sectionId, items) {
+    const el = document.getElementById(sectionId);
+    el.innerHTML = items.map(item => `
+      <div class="menu-item">
+        <div class="item-left">
+          <div class="item-name">${item.name}</div>
+          <div class="item-desc">${item.desc}</div>
+        </div>
+        <div class="item-price">$${item.price}</div>
+        <div class="qty-ctrl">
+          <button class="qty-btn" onclick="changeQty('${item.id}',-1,${item.price},'${item.name}')">−</button>
+          <span class="qty-num" id="qty-${item.id}">${cart[item.id]?.qty||0}</span>
+          <button class="qty-btn plus" onclick="changeQty('${item.id}',1,${item.price},'${item.name}')">+</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function changeQty(id, delta, price, name) {
+    if (!cart[id]) cart[id] = { qty:0, price, name };
+    cart[id].qty = Math.max(0, cart[id].qty + delta);
+    if (cart[id].qty === 0) delete cart[id];
+    const el = document.getElementById('qty-'+id);
+    if (el) el.textContent = cart[id]?.qty||0;
+    updateCart();
+  }
+
+  function getSubtotal() {
+    return Object.values(cart).reduce((s,i)=>s+i.price*i.qty,0);
+  }
+
+  function getCount() {
+    return Object.values(cart).reduce((s,i)=>s+i.qty,0);
+  }
+
+  function cartItemsHTML() {
+    const items = Object.entries(cart);
+    if (!items.length) return '<div class="cart-empty">Agrega platillos para empezar</div>';
+    return items.map(([id,{name,price,qty}])=>`
+      <div class="cart-line">
+        <span>${name} ×${qty}</span>
+        <span style="color:var(--accent)">$${price*qty}</span>
+      </div>`).join('');
+  }
+
+  function cartFormHTML(subtotal) {
+    return `
+      <div class="cart-totals">
+        <div class="cart-row"><span class="label">Subtotal</span><span>$${subtotal}</span></div>
+        <div class="cart-row"><span class="label">Envío</span><span>$50</span></div>
+        <div class="cart-row total"><span class="label">Total</span><span style="color:var(--accent)">$${subtotal+50}</span></div>
+      </div>
+      <div style="margin-top:16px;">
+        <input class="input-field" id="addr" placeholder="📍 Dirección de entrega"/>
+        <input class="input-field" id="phone" placeholder="📱 Tu WhatsApp"/>
+        <button class="pay-btn" onclick="checkout()">Pagar con MercadoPago →</button>
+        <div class="secure-note">🔒 Pago seguro · Tarjeta, OXXO o transferencia</div>
+      </div>`;
+  }
+
+  function updateCart() {
+    const subtotal = getSubtotal();
+    const count = getCount();
+    const fab = document.getElementById('cart-fab');
+
+    // Desktop
+    const dc = document.getElementById('cart-content-desktop');
+    dc.innerHTML = cartItemsHTML() + (count > 0 ? cartFormHTML(subtotal) : '');
+
+    // FAB móvil
+    if (count > 0) {
+      fab.style.display = 'block';
+      document.getElementById('fab-total').textContent = (subtotal+50).toLocaleString('es-MX');
+    } else {
+      fab.style.display = 'none';
+    }
+  }
+
+  function openModal() {
+    const subtotal = getSubtotal();
+    document.getElementById('cart-content-mobile').innerHTML =
+      cartItemsHTML() + (getCount()>0 ? cartFormHTML(subtotal) : '');
+    document.getElementById('modal').style.display = 'flex';
+  }
+
+  function closeModal() {
+    document.getElementById('modal').style.display = 'none';
+  }
+
+  function checkout() {
+    const addr = (document.getElementById('addr')?.value||'').trim();
+    const phone = (document.getElementById('phone')?.value||'').trim();
+    if (!addr) { alert('Por favor ingresa tu dirección'); return; }
+    if (!phone) { alert('Por favor ingresa tu WhatsApp'); return; }
+
+    const subtotal = getSubtotal();
+    const items = Object.values(cart).map(i=>`${i.name} x${i.qty} = $${i.price*i.qty}`).join('%0A');
+    const msg = `🌮 *Pedido ComeCabos - La K-Trina*%0A%0A${items}%0A%0A📍 ${encodeURIComponent(addr)}%0A📱 ${encodeURIComponent(phone)}%0A%0A💰 Total: $${subtotal+50} MXN`;
+
+    // Reemplaza el número con el tuyo
+    window.open(`https://wa.me/526241234567?text=${msg}`, '_blank');
+    closeModal();
+    cart = {};
+    Object.keys(menuData).forEach(sec => renderSection(sec, menuData[sec]));
+    updateCart();
+    alert('¡Pedido enviado! Te contactaremos para confirmar y procesar el pago.');
+  }
+
+  // Init
+  Object.keys(menuData).forEach(sec => renderSection(sec, menuData[sec]));
+  updateCart();
+</script>
+</body>
+</html>
