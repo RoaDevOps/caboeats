@@ -349,9 +349,13 @@
 
   function checkout() {
 
-  const addr = (document.getElementById('addr')?.value || '').trim();
-  const phone = (document.getElementById('phone')?.value || '').trim();
-  const notes = (document.getElementById('notes')?.value || '').trim();
+  const addrInput = document.querySelector('#addr');
+const phoneInput = document.querySelector('#phone');
+const notesInput = document.querySelector('#notes');
+
+const addr = addrInput ? addrInput.value.trim() : '';
+const phone = phoneInput ? phoneInput.value.trim() : '';
+const notes = notesInput ? notesInput.value.trim() : '';
 
   if (!addr) {
     alert('Por favor ingresa tu dirección');
@@ -400,11 +404,15 @@ En aproximadamente *3 minutos* el restaurante se comunicará contigo para confir
 
 Gracias por usar *ComeCabos*.`;
 
-  // NUMERO RESTAURANTE
-  const restaurantPhone = "526242254030";
+  // NUMEROS RESTAURANTE
+const restaurantPhone = "526242254030"; // numero roa
+const secondPhone = "526242419031"; // numero cesar
 
-  // ABRIR WHATSAPP RESTAURANTE
-  window.open(`https://wa.me/${restaurantPhone}?text=${encodeURIComponent(restaurantMsg)}`, '_blank');
+// ABRIR WHATSAPP RESTAURANTE 1
+window.open(`https://wa.me/${restaurantPhone}?text=${encodeURIComponent(restaurantMsg)}`, '_blank');
+
+// ABRIR WHATSAPP RESTAURANTE 2
+window.open(`https://wa.me/${secondPhone}?text=${encodeURIComponent(restaurantMsg)}`, '_blank');
 
   // ABRIR WHATSAPP CLIENTE
   window.open(`https://wa.me/${phone}?text=${encodeURIComponent(clientMsg)}`, '_blank');
