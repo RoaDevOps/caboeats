@@ -313,7 +313,7 @@
       <div style="margin-top:16px;">
         <input class="input-field" id="addr" placeholder="📍 Dirección de entrega"/>
         <input class="input-field" id="phone" placeholder="📱 Tu WhatsApp"/>
-        <button class="pay-btn" onclick="checkout()">Pagar con MercadoPago →</button>
+        <button class="pay-btn" onclick="checkout()">Enviar mi pedido →</button>
         <div class="secure-note">🔒 Pago seguro · Tarjeta, OXXO o transferencia</div>
       </div>`;
   }
@@ -348,23 +348,75 @@
   }
 
   function checkout() {
-    const addr = (document.getElementById('addr')?.value||'').trim();
-    const phone = (document.getElementById('phone')?.value||'').trim();
-    if (!addr) { alert('Por favor ingresa tu dirección'); return; }
-    if (!phone) { alert('Por favor ingresa tu WhatsApp'); return; }
 
-    const subtotal = getSubtotal();
-    const items = Object.values(cart).map(i=>`${i.name} x${i.qty} = $${i.price*i.qty}`).join('%0A');
-    const msg = `🌮 *Pedido ComeCabos - La K-Trina*%0A%0A${items}%0A%0A📍 ${encodeURIComponent(addr)}%0A📱 ${encodeURIComponent(phone)}%0A%0A💰 Total: $${subtotal+50} MXN`;
+  const addr = (document.getElementById('addr')?.value || '').trim();
+  const phone = (document.getElementById('phone')?.value || '').trim();
+  const notes = (document.getElementById('notes')?.value || '').trim();
 
-    // Reemplaza el número con el tuyo
-    window.open(`https://wa.me/526241234567?text=${msg}`, '_blank');
-    closeModal();
-    cart = {};
-    Object.keys(menuData).forEach(sec => renderSection(sec, menuData[sec]));
-    updateCart();
-    alert('¡Pedido enviado! Te contactaremos para confirmar y procesar el pago.');
+  if (!addr) {
+    alert('Por favor ingresa tu dirección');
+    return;
   }
+
+  if (!phone) {
+    alert('Por favor ingresa tu WhatsApp');
+    return;
+  }
+
+  const subtotal = getSubtotal();
+
+  const items = Object.values(cart)
+    .map(i => `${i.name} x${i.qty} = $${i.price * i.qty}`)
+    .join('%0A');
+
+  const total = subtotal + 50;
+
+  // MENSAJE AL RESTAURANTE
+  const restaurantMsg =
+`🌮 *Pedido ComeCabos - La K-Trina*
+
+${items}
+
+📍 Dirección:
+${encodeURIComponent(addr)}
+
+📱 Cliente:
+${encodeURIComponent(phone)}
+
+📝 Nota:
+${encodeURIComponent(notes)}
+
+💰 Total: $${total} MXN`;
+
+  // MENSAJE AL CLIENTE
+  const clientMsg =
+`Hola 👋
+
+Tu pedido en *La K-Trina* fue recibido.
+
+🍽️ Estamos preparando tu comida.
+
+En aproximadamente *3 minutos* el restaurante se comunicará contigo para confirmar el pedido.
+
+Gracias por usar *ComeCabos*.`;
+
+  // NUMERO RESTAURANTE
+  const restaurantPhone = "526242254030";
+
+  // ABRIR WHATSAPP RESTAURANTE
+  window.open(`https://wa.me/${restaurantPhone}?text=${encodeURIComponent(restaurantMsg)}`, '_blank');
+
+  // ABRIR WHATSAPP CLIENTE
+  window.open(`https://wa.me/${phone}?text=${encodeURIComponent(clientMsg)}`, '_blank');
+
+  closeModal();
+
+  cart = {};
+  Object.keys(menuData).forEach(sec => renderSection(sec, menuData[sec]));
+  updateCart();
+
+  alert("Pedido enviado correctamente");
+}
 
   // Init
   Object.keys(menuData).forEach(sec => renderSection(sec, menuData[sec]));

@@ -11,7 +11,7 @@
 // ============================================
 // CONFIGURACIÓN — EDITAR ANTES DE PRODUCCIÓN
 // ============================================
-const WHATSAPP_NUMBER = "526241234567"; // ← Reemplaza con tu número real
+const WHATSAPP_NUMBER = "526422254030"; // ← Reemplaza con tu número real
 const DELIVERY_FEE = 50;               // Costo de envío en MXN
 
 // ============================================
@@ -120,7 +120,7 @@ function buildCartHTML(subtotal, count) {
       </div>
     </div>
     <div style="margin-top:16px;">
-      <input class="input-field" id="addr" placeholder="📍 Dirección de entrega" />
+      <input class="input-field" id="addr" placeholder="📍 Donde trabajas " />
       <input class="input-field" id="phone" placeholder="📱 Tu WhatsApp" />
       <button class="pay-btn" onclick="checkout()">Pagar con MercadoPago →</button>
       <div class="secure-note">🔒 Pago seguro · Tarjeta, OXXO o transferencia</div>
